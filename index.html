@@ -1,0 +1,765 @@
+<!DOCTYPE html><html>
+
+<head>
+<meta charset="utf-8">
+<title># 哲学家进餐问题</title>
+<style>
+html,body{ font-family: "SF UI Display", ".PingFang SC","PingFang SC", "Neue Haas Grotesk Text Pro", "Arial Nova", "Segoe UI", "Microsoft YaHei", "Microsoft JhengHei", "Helvetica Neue", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "Hiragino Sans GB", sans-serif;
+  font-size: 16px;
+  color:#222
+  -webkit-text-size-adjust:none;  min-width: 200px;
+  max-width: 760px;
+  margin: 0 auto; padding: 1rem;
+  line-height: 1.5rem;
+
+}
+h1,h2,h3,h4,h5,h6{font-family: "PT Sans","SF UI Display", ".PingFang SC","PingFang SC", "Neue Haas Grotesk Text Pro", "Arial Nova", "Segoe UI", "Microsoft YaHei", "Microsoft JhengHei", "Helvetica Neue", "Source Han Sans SC", "Noto Sans CJK SC", "Source Han Sans CN", "Noto Sans SC", "Source Han Sans TC", "Noto Sans CJK TC", "Hiragino Sans GB", sans-serif;
+text-rendering:optimizelegibility;margin-bottom:1em;font-weight:bold; line-height: 1.8rem;
+
+}
+h1,h2{position:relative;padding-top:1rem;padding-bottom:0.2rem;margin-bottom:1rem;background:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAABCAYAAACsXeyTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAFUlEQVQIHWNIS0sr/v//PwMMDzY+ADqMahlW4J91AAAAAElFTkSuQmCC') bottom left repeat-x;}
+h2{padding-top:0.8rem;padding-bottom:0.2rem;}
+h1{ font-size: 1.6rem;}
+h2{ font-size: 1.4rem;}
+h3{ font-size: 1.2rem;}
+h4{ font-size: 1.1rem;}
+h5{ font-size: 1.0rem;}
+h6{ font-size: 0.9rem;}
+
+table{border-collapse:collapse;border-spacing:0;
+  margin-top: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+tr{  background-color: #fff;
+  border-top: 1px solid #ccc;}
+th,td{padding: 5px 14px;
+  border: 1px solid #ddd;}
+
+blockquote{font-style:italic;font-size:1.1em;line-height:1.5em;padding-left:1em; border-left:4px solid #D5D5D5;    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1.5rem; }
+
+a{color:#1863a1}
+
+pre,code,p code,li code{font-family:Menlo,Monaco,"Andale Mono","lucida console","Courier New",monospace}
+
+pre{-webkit-border-radius:0.4em;-moz-border-radius:0.4em;-ms-border-radius:0.4em;-o-border-radius:0.4em;border-radius:0.4em;border:1px solid #e7dec3;line-height:1.45em;font-size:0.9rem;margin-bottom:2.1em;padding:.8em 1em;color:#586e75;overflow:auto; background-color:#fdf6e3;}
+
+p code,li code{display:inline-block;white-space:no-wrap;background:#fff;font-size:0.9rem;line-height:1.5em;color:#555;border:1px solid #ddd;-webkit-border-radius:0.4em;-moz-border-radius:0.4em;-ms-border-radius:0.4em;-o-border-radius:0.4em;border-radius:0.4em;padding:0 .3em;margin:-1px 4px;}
+p pre code,li pre code{font-size:1em !important;background:none;border:none}
+
+img{max-width:100%;-webkit-border-radius:0.3em;-moz-border-radius:0.3em;-ms-border-radius:0.3em;-o-border-radius:0.3em;border-radius:0.3em;-webkit-box-shadow:rgba(0,0,0,0.15) 0 1px 4px;-moz-box-shadow:rgba(0,0,0,0.15) 0 1px 4px;box-shadow:rgba(0,0,0,0.15) 0 1px 4px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;border:#fff 0.5em solid}
+
+
+hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+
+/*
+
+Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmail.com>
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #fdf6e3;
+  color: #657b83;
+  -webkit-text-size-adjust: none;
+}
+
+.hljs-comment,
+.diff .hljs-header,
+.hljs-doctype,
+.hljs-pi,
+.lisp .hljs-string {
+  color: #93a1a1;
+}
+
+/* Solarized Green */
+.hljs-keyword,
+.hljs-winutils,
+.method,
+.hljs-addition,
+.css .hljs-tag,
+.hljs-request,
+.hljs-status,
+.nginx .hljs-title {
+  color: #859900;
+}
+
+/* Solarized Cyan */
+.hljs-number,
+.hljs-command,
+.hljs-string,
+.hljs-tag .hljs-value,
+.hljs-rule .hljs-value,
+.hljs-doctag,
+.tex .hljs-formula,
+.hljs-regexp,
+.hljs-hexcolor,
+.hljs-link_url {
+  color: #2aa198;
+}
+
+/* Solarized Blue */
+.hljs-title,
+.hljs-localvars,
+.hljs-chunk,
+.hljs-decorator,
+.hljs-built_in,
+.hljs-identifier,
+.vhdl .hljs-literal,
+.hljs-id,
+.css .hljs-function,
+.hljs-name {
+  color: #268bd2;
+}
+
+/* Solarized Yellow */
+.hljs-attribute,
+.hljs-variable,
+.lisp .hljs-body,
+.smalltalk .hljs-number,
+.hljs-constant,
+.hljs-class .hljs-title,
+.hljs-parent,
+.hljs-type,
+.hljs-link_reference {
+  color: #b58900;
+}
+
+/* Solarized Orange */
+.hljs-preprocessor,
+.hljs-preprocessor .hljs-keyword,
+.hljs-pragma,
+.hljs-shebang,
+.hljs-symbol,
+.hljs-symbol .hljs-string,
+.diff .hljs-change,
+.hljs-special,
+.hljs-attr_selector,
+.hljs-subst,
+.hljs-cdata,
+.css .hljs-pseudo,
+.hljs-header {
+  color: #cb4b16;
+}
+
+/* Solarized Red */
+.hljs-deletion,
+.hljs-important {
+  color: #dc322f;
+}
+
+/* Solarized Violet */
+.hljs-link_label {
+  color: #6c71c4;
+}
+
+.tex .hljs-formula {
+  background: #eee8d5;
+}
+
+body {
+  background-color:#eeeeee;
+  margin:0px;
+  padding:0px;
+  min-width:600px;
+}
+
+/* Basic (2 column, liquid) layout */
+
+div#layout-maincontainer {
+  margin-left:180px;
+}
+div#layout-main {
+  float:right;
+  width:100%;
+  margin:0 0 0 -180px;
+}
+div#layout-leftcol {
+  width:180px;
+  margin:0 0 0 0;
+}
+div#layout-footer {
+  clear:both;
+}
+
+/* Banner */
+
+#prism-banner {
+  width:100%;
+  height:80px;
+  margin:0;
+  padding:0;
+  border:0;
+  text-align:center;
+  background-color:#6260c1; /* Right blue */
+}
+#prism-bannerlefthalf {
+  position:absolute;
+  top:0;
+  left:0;
+  width:50%;
+  height:80px;
+  margin:0;
+  background-color:#272582; /* Left blue */
+}
+#prism-bannerrighthalf {
+  position:absolute;
+  top:0;
+  right:0;
+  width:50%;
+  height:80px;
+  margin:0;
+  background-color:#6260c1; /* Right blue */
+}
+#prism-bannerlogo {
+  position:absolute;
+  top:0;
+  left:0;
+  width:75px;
+  height:60px;
+  margin:0;
+  padding:10px 0 10px 25px;
+  text-align:left;
+  background-color:#272582; /* Left blue */
+}
+#prism-bannerurl {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:80px;
+  margin:0;
+  padding:0;
+  text-align:center;
+}
+#prism-bannerurl img {
+  margin:0 100px 0 0; /* Centre URL but allow for fact RHS is wider */
+}
+#prism-bannerright {
+  height:80px;
+  background-color:#333173;
+}
+#prism-searchbox {
+  position:absolute;
+  top:28px;
+  right:20px;
+  text-align:right;
+}
+#prism-searchbox #q {
+  background:#d9dbe1;
+  border:1px solid #9097a2;
+  padding:2px;
+  width:100px;
+}
+#prism-searchbox #submit {
+  background:#6A7389 none repeat scroll 0%;
+  border-color:#9097a2 #283043 #283043 #9097a2;
+  border-style:solid;
+  border-width:1px;
+  color:#ffffff;
+  padding:1px 4px;
+}
+
+/* Main navigation bar (horizontal) */
+
+#prism-navbar {
+  clear:both;
+  padding:2px 0;
+  border:solid #777777;
+  border-width:0 0 1px 0;
+  background:#999999 url('../images/nav_top.png') 0 0 repeat-x;
+  font-weight:bold;
+  text-align:center;
+}
+
+#prism-navbarinner {
+  margin:0 auto;
+}
+
+ul#prism-navbarmenu {
+  display:inline-block; /* So we can center this horizontally */
+  list-style-type:none;
+  margin:0;
+  padding:2px;
+}
+
+ul#prism-navbarmenu > li {
+  display:block;
+  float:left;
+  border:0;
+  margin:0;
+  padding:0;
+  background:none;
+  position:relative;
+}
+
+li.prism-navitem > a, li.prism-navitemsel > a {
+  display:block;
+  padding:2px;
+  border-color:#999999;
+  border-style:solid;
+  border-width:1px;
+  border-radius:4px 4px 0 0;
+}
+
+li.prism-navitem > a.prism-navitemhover, li.prism-navitemsel > a.prism-navitemhover {
+  background-color:#bbbbbb;
+  border-color:#777777;
+  border-width:1px 1px 0 1px;
+  color:white;
+}
+
+li.prism-navitem > a.prism-navitemhoverempty, li.prism-navitemsel > a.prism-navitemhoverempty {
+  background-color:#bbbbbb;
+  border-color:#777777;
+  border-radius:4px;
+}
+
+li.prism-navitem > a:link { color:black; text-decoration:none; }
+li.prism-navitem > a:visited { color:black; text-decoration:none; }
+li.prism-navitem > a:hover { color:white; text-decoration:none; }
+li.prism-navitem > a:active { color:black; text-decoration:none; }
+
+li.prism-navitemsel > a:link { color:white; text-decoration:none; }
+li.prism-navitemsel > a:visited { color:white; text-decoration:none; }
+li.prism-navitemsel > a:hover { color:white; text-decoration:none; }
+li.prism-navitemsel > a:active { color:white; text-decoration:none; }
+
+ul.prism-navbarsubmenu
+{
+  list-style-type:none;
+  position:absolute;
+  display:none;
+  margin:0;
+  padding:0;
+  background:#eeeeee;
+  border:solid #777777 1px;
+  padding:2px;
+  box-shadow:2px 2px 2px rgba(150,150,150,0.5);
+}
+
+ul.prism-navbarsubmenu li {
+  font-weight:normal;
+  position:relative;
+  display:block;
+  margin:0;
+  padding:2px;
+  width:auto;
+  background:none;
+  white-space:nowrap;
+  text-align:left;
+  text-decoration:none;
+}
+
+ul.prism-navbarsubmenu li:hover {
+  background:#999999;
+  color:#ffffff;
+}
+
+ul.prism-navbarsubmenu li:hover a {
+  background:inherit;
+  color:inherit;
+}
+
+li.prism-navsubitem > a:link { color:black; text-decoration:none; }
+li.prism-navsubitem > a:visited { color:black; text-decoration:none; }
+li.prism-navsubitem > a:hover { color:white; text-decoration:none; }
+li.prism-navsubitem > a:active { color:black; text-decoration:none; }
+
+li.prism-navsubitemsel > a:link { color:white; text-decoration:none; }
+li.prism-navsubitemsel > a:visited { color:white; text-decoration:none; }
+li.prism-navsubitemsel > a:hover { color:white; text-decoration:none; }
+li.prism-navsubitemsel > a:active { color:white; text-decoration:none; }
+
+/* Main content box */
+
+#prism-mainbox {
+  padding:5px 30px 100px 30px;
+  border:solid #cccccc;
+  border-width:0 0 1px 1px;
+  background-color:#ffffff;
+  border-radius:0 0 0 8px;
+}
+#prism-unilogo {
+  float:right;
+  margin:15px 0 10px 10px;
+}
+
+/* Second navigation panel (LHS) */
+
+#prism-navbar2 {
+  padding:5px 20px 250px 20px;
+  background:#eeeeee url('../images/trinity.png') 0 0 no-repeat;
+  color:#333333;
+}
+#prism-navbar2 a {
+  font-size:10pt;
+  color:#333333;
+}
+#prism-navbar2 .selflink {
+  color:#000000;
+  font-weight:bold;
+}
+#prism-navbar2 h1, #prism-navbar2 h1 a {
+  margin-bottom:0.3em;
+  font-size:13pt;
+}
+#prism-navbar2 h3, #prism-navbar2 h3 a {
+  margin-bottom:0.3em;
+  font-size:11pt;
+}
+#prism-navbar2 ul {
+  margin-left:0.8em;
+  padding-left:0.8em;
+}
+#prism-navbar2 li {
+  list-style-image:url('../images/hyphen.png');
+  margin-bottom:0.4em;
+}
+#prism-navbar2 .prism-newsitem {
+  margin-top:10px;
+  margin-left:5px;
+  font-size:9pt;
+}
+#prism-navbar2 .prism-newsitem a {
+  font-size:9pt;
+  color:blue;
+}
+#prism-navbar2 hr {
+  height:0;
+  border:dotted #808080;
+  border-width:1px 0 0 0;
+}
+
+#prism-advert {
+  float:right;
+  width:150px;
+  /*height:180px;*/
+  margin:20px 30px 0 10px;
+  background:#eeeeee;
+  /*background:#eeeeee url('../images/trinity.png') 0 0 no-repeat;*/
+  border:solid #777777 1px;
+  border-radius:7px;
+  font-size:9pt;
+  box-shadow:2px 2px 2px rgba(150,150,150,0.5);
+}
+
+#prism-advertheader {
+  background-color:#999999;
+  border-radius:6px 6px 0 0;
+  color:#ffffff;
+  padding:6px;
+  font-size:11pt;
+  font-weight:bold;
+}
+
+#prism-advertheader a {
+  font-size:11pt;
+  color:#ffffff;
+}
+
+#prism-advertbox {
+  padding:6px;
+  font-size:9pt;
+}
+
+#prism-advertbox p, #prism-advertbox a {
+  font-size:9pt;
+}
+
+/* Footer */
+
+#prism-footer {
+  /*margin-left:180px;*/
+  padding:20px 0 30px 0;
+  text-align:center;
+}
+
+/* General components/styles */
+
+/* Tables */
+
+table.prism-table {
+  background-color:#eeeeee;
+  color:#333333;
+  text-align:left;
+  margin-left:auto;
+  margin-right:auto;
+  border-collapse:collapse;
+  border:solid 2px #000000;
+}
+table.prism-table a {
+  /*color:#333333;*/
+}
+table.prism-table tr.prism-th td {
+  border-color:#999999;
+  background-color:#cccccc;
+  color:#000000;
+  font-weight:bold;
+  text-align:center;
+}
+table.prism-table tr.prism-thl td {
+  border-color:#999999;
+  background-color:#cccccc;
+  color:#000000;
+  font-weight:bold;
+  text-align:left;
+}
+table.prism-table td {
+  border:1px solid;
+  border-color:#999999 #dddddd #999999 #dddddd;
+  padding:1px 5px 1px 5px;
+  vertical-align:top;
+  text-align:left;
+}
+div.prism-table-caption
+{
+  font-weight:bold;
+  text-align:center;
+  margin-top:0.5em;
+  margin-bottom:0.75em;
+}
+
+/* Other */
+
+.prism-newsitem {
+  padding-bottom:10px;
+}
+.prism-newsitemhead {
+  font-weight:bold;
+}
+
+.prism-rule {
+  width:100%;
+  height:0px;
+  border:0px;
+  border-top:dashed 1px #000099;
+  margin:15px 0 15px 0;
+}
+
+img.prism-image {
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+  padding:4px;
+  border:solid 1px #333333;
+}
+.prism-image-caption {
+  margin-top:5px;
+  text-align:center;
+  font-weight:bold;
+}
+
+ul.prism-list0 {
+}
+ul.prism-list0 li {
+  list-style-image:url('../images/bullet0.png');
+}
+ul, ul.prism-list {
+}
+ul li, ul.prism-list li {
+  list-style-image:url('../images/bullet.png');
+}
+ul.prism-list2, ul ul {
+}
+ul.prism-list2 li, li li {
+  list-style-image:url('../images/bullet2.png');
+}
+
+ul.spacedout li {
+  margin-top:0.8em;
+  margin-bottom:0.8em;
+}
+
+.prism-box {
+  background-color:#eeeeee;
+  border:dotted 1px #cccccc;
+  padding:0 10px 0 10px;
+  width:90%; /* Need a width or else IE6 gets upset */
+  overflow:auto;
+}
+.prism-citebox {
+  background-color:#fff8dc;
+  border:solid 1px #d7cca3;
+  border-radius:7px;
+  width:90%; /* Need a width or else IE6 gets upset */
+  overflow:auto;
+  box-shadow:2px 2px 2px rgba(150,150,150,0.5);
+}
+.prism-citeboxheader {
+  background-color:#ffebcd;
+  padding:5px;
+}
+.prism-code {
+  background-color:#ffffcc;
+  border:dotted 2px #999999;
+  margin:10px;
+  padding:10px;
+  width:90%; /* Need a width or else IE6 gets upset */
+  overflow:auto;
+}
+.prism-code-scroll {
+  background-color:#ffffcc;
+  border:dotted 2px #999999;
+  margin:10px;
+  padding:10px;
+  height:500px;
+  width:90%; /* Need a width or else IE6 gets upset */
+  overflow:auto;
+}
+* html .prism-code {
+  padding-bottom:1.5em; /* Nasty hack to fix IE6 scrollbar positioning */
+}
+.prismkeyword { font-weight:bold; }
+.prismident { color:#cc0000; }
+.prismnum { color:#0000cc; }
+.prismcomment { font-style:italic; color:#009900; }
+.prismpreproc { color:#a020f0; }
+
+.prism-floatbox {
+  clear:both;
+  float:right;
+  width: 100px;
+  background-color:#bdced6;
+  border:dotted 1px #000099;
+  margin:20px 10px 20px 20px;
+  padding:10px;
+}
+
+.prism-download-box {
+  border:dotted 2px #000099;
+  margin:15px;
+  padding:15px;
+}
+
+a.prism-cite { color:#006600; }
+
+.prism-note { color:#666666; }
+.prism-note a { color:#666666; }
+.prism-note a.prism-cite { color:#006600; }
+
+.prism-task {
+  vertical-align:top;
+  width:47px;
+  height:28px;
+  float:left;
+  clear:both;
+}
+
+</style>
+
+<style> @media print{ .hljs{overflow: visible; word-wrap: break-word !important;} }</style></head><body><div class="markdown-body">
+<h1 id="toc_0">哲学家进餐问题</h1>
+
+<p>哲学家进餐问题是将一套资源分配给数个进程而产生的并发问题（concurrency problems）之一。Edsger Dijkstra是该问题的提出者，他在1971年做了一个关于五台电脑竞争五个共享的磁带驱动器的实验问题。这个计算机的问题由Tony Hoare转述而成了著名的哲学家进餐问题。</p>
+
+<p>问题假设存在一定数目、生活只关于进食与思考的哲学家。他们环绕着坐在圆桌旁。每两个相邻的哲学家之间都放置了一把叉，而每个哲学家都需要同时占据他身旁的两把叉子才能进食。哲学家们一次只能拿起一把叉子，他们吃完饭后，会把两把叉子都归回原位并重新开始思考。注意，由于哲学家们共享叉子，他们是不可能在同一时间同时进食的。</p>
+
+<p><img src="media/14916703935460/14916710005209.png" alt=""/>￼</p>
+
+<p>该问题的一个解决方法是要求每一个哲学家都必须遵守一套规定的一个算法，他们遵守的这套规定使得：</p>
+
+<ul>
+<li>永远都不会有死锁的情况（譬如，不会有没有哲学家开始进餐的情况）</li>
+<li>永远都不会有资源匮乏的情况（譬如，不会有哲学家想吃饭却没得吃的情况）</li>
+</ul>
+
+<p>下面给出一个能够让哲学家们陷入死锁问题的一个情况：假如哲学家们都饿的不行，紧接着他们在同一时刻都伸出了手拿起了他们左手边的叉子，这样他们就陷入了死锁状态，因为他们都在等待自己右手边的哲学家放下叉子以便自己进餐，于是这样就没有人会动了。</p>
+
+<hr/>
+
+<h2 id="toc_1">一个随机的解决方案</h2>
+
+<p>现在我们考虑考虑Lehmann与Rabin对该问题的随机的解决方案。它确保了整个系统不会陷入死锁的情况，比如：假如一个哲学家饿了，那么它最终会吃上东西的。</p>
+
+<p>用三个哲学家构建的PRISM模型如下所示：</p>
+
+<pre class="prism-code"><span class="prismcomment">// 随机进餐的哲学家们 [LR81]</span>
+<span class="prismcomment">// 三个哲学家</span>
+
+<span class="prismkeyword">mdp</span>
+
+<span class="prismcomment">// 公式 </span>
+<span class="prismcomment">// 左叉可用 （左边坐着哲学家2）</span>
+<span class="prismkeyword">formula</span> <span class="prismident">lfree</span> = (<span class="prismident">p2</span>&gt;=<span class="prismnum">0</span> &amp; <span class="prismident">p2</span>&lt;=<span class="prismnum">4</span>) | <span class="prismident">p2</span>=<span class="prismnum">6</span> | <span class="prismident">p2</span>=<span class="prismnum">10</span>;
+<span class="prismcomment">// 右叉可用 （左边坐着哲学家3）</span>
+<span class="prismkeyword">formula</span> <span class="prismident">rfree</span> = (<span class="prismident">p3</span>&gt;=<span class="prismnum">0</span> &amp; <span class="prismident">p3</span>&lt;=<span class="prismnum">3</span>) | <span class="prismident">p3</span>=<span class="prismnum">5</span> | <span class="prismident">p3</span>=<span class="prismnum">7</span> | <span class="prismident">p3</span>=<span class="prismnum">11</span>;
+
+<span class="prismkeyword">module</span> <span class="prismident">phil1</span>
+
+    <span class="prismident">p1</span>: [<span class="prismnum">0</span>..<span class="prismnum">11</span>];
+
+    [] <span class="prismident">p1</span>=<span class="prismnum">0</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">1</span>); <span class="prismcomment">// 思考着思考着就会饿</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">1</span> -&gt; <span class="prismnum">0.5</span> : (<span class="prismident">p1'</span>=<span class="prismnum">2</span>) + <span class="prismnum">0.5</span> : (<span class="prismident">p1'</span>=<span class="prismnum">3</span>); <span class="prismcomment">// 随机抽取</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">2</span> &amp;  <span class="prismident">lfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">4</span>); <span class="prismcomment">// 拿起左叉</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">3</span> &amp;  <span class="prismident">rfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">5</span>); <span class="prismcomment">// 拿起右叉</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">4</span> &amp;  <span class="prismident">rfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">8</span>); <span class="prismcomment">// 拿起右叉（已拿起左叉）</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">4</span> &amp; !<span class="prismident">rfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">6</span>); <span class="prismcomment">// 右叉被占用（已拿起左叉）</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">5</span> &amp;  <span class="prismident">lfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">8</span>); <span class="prismcomment">// 拿起左叉（已拿起右叉）</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">5</span> &amp; !<span class="prismident">lfree</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">7</span>); <span class="prismcomment">// 左叉被占用（已拿起右叉）</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">6</span>  -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">1</span>); <span class="prismcomment">// 放下左叉</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">7</span>  -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">1</span>); <span class="prismcomment">// 放下右叉</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">8</span>  -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">9</span>); <span class="prismcomment">// 开始次饭（拿到了两叉）</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">9</span>  -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">10</span>); <span class="prismcomment">// 吃完了，放下左叉 </span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">9</span>  -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">11</span>); <span class="prismcomment">// 吃完了，放下右叉</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">10</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">0</span>); <span class="prismcomment">// 放下右叉，回归思考</span>
+    [] <span class="prismident">p1</span>=<span class="prismnum">11</span> -&gt; (<span class="prismident">p1'</span>=<span class="prismnum">0</span>); <span class="prismcomment">// 放下左叉，回归思考</span>
+
+<span class="prismkeyword">endmodule</span>
+
+<span class="prismcomment">// 通过重命名的方式构建其他的模块</span>
+<span class="prismkeyword">module</span> <span class="prismident">phil2</span> = <span class="prismident">phil1</span> [ <span class="prismident">p1</span>=<span class="prismident">p2</span>, <span class="prismident">p2</span>=<span class="prismident">p3</span>, <span class="prismident">p3</span>=<span class="prismident">p1</span> ] <span class="prismkeyword">endmodule</span>
+<span class="prismkeyword">module</span> <span class="prismident">phil3</span> = <span class="prismident">phil1</span> [ <span class="prismident">p1</span>=<span class="prismident">p3</span>, <span class="prismident">p2</span>=<span class="prismident">p1</span>, <span class="prismident">p3</span>=<span class="prismident">p2</span> ] <span class="prismkeyword">endmodule</span>
+
+<span class="prismcomment">// 标签</span>
+
+<span class="prismcomment">// 这位哲学家饿了</span>
+<span class="prismkeyword">label</span> "<span class="prismident">hungry</span>" = ((<span class="prismident">p1</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p1</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p2</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p2</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p3</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p3</span>&lt;<span class="prismnum">8</span>)); 
+<span class="prismcomment">// 这位哲学家在次饭</span>
+<span class="prismkeyword">label</span> "<span class="prismident">eat</span>" = ((<span class="prismident">p1</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p1</span>&lt;=<span class="prismnum">9</span>))|((<span class="prismident">p2</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p2</span>&lt;=<span class="prismnum">9</span>))|((<span class="prismident">p3</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p3</span>&lt;=<span class="prismnum">9</span>));
+<span class="prismcomment">// 哲学家1饿了</span>
+<span class="prismkeyword">label</span> "<span class="prismident">hungry1</span>" = (<span class="prismident">p1</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p1</span>&lt;<span class="prismnum">8</span>);
+<span class="prismcomment">// 哲学家2饿了</span>
+<span class="prismkeyword">label</span> "<span class="prismident">hungry2</span>" = (<span class="prismident">p2</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p2</span>&lt;<span class="prismnum">8</span>);
+<span class="prismcomment">// 哲学家3饿了</span>
+<span class="prismkeyword">label</span> "<span class="prismident">hungry3</span>" = (<span class="prismident">p3</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p3</span>&lt;<span class="prismnum">8</span>);
+ <span class="prismcomment">// 哲学家1在吃饭</span>
+<span class="prismkeyword">label</span> "<span class="prismident">eat1</span>" = (<span class="prismident">p1</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p1</span>&lt;=<span class="prismnum">9</span>);
+ <span class="prismcomment">// 哲学家2在吃饭</span>
+<span class="prismkeyword">label</span> "<span class="prismident">eat2</span>" = (<span class="prismident">p2</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p2</span>&lt;=<span class="prismnum">9</span>);
+ <span class="prismcomment">// 哲学家3在吃饭</span>
+<span class="prismkeyword">label</span> "<span class="prismident">eat3</span>" = (<span class="prismident">p3</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p3</span>&lt;=<span class="prismnum">9</span>);
+</pre>
+
+<p>正如文件开头的关键词所示，该模型是一个马可夫决策过程。我们一共有三个模块，用来表示三位哲学家。</p>
+
+<p>注意，哲学家吃晚饭以后（比如，哲学家1到了p1=9的状态），产生的关于先该放下哪把叉子的不定决策由启用两条指令的方式予以呈现（譬如，存在多条均以p1=9为guard的指令）。</p>
+
+<p>同样要注意的是用PRISM公式（lfree以及rfree）来替换文件中重复使用的表达式的用法。在该模型中，这些公式被用来识别某位哲学家其左右相邻的哲学家是否拿起了这位哲学家的叉子。正如代码所示的那样，这要求我们在构建哲学家2和哲学家3的模块时需要对p1，p2以及p3进行重命名。重命名使得整个模型对应了哲学家2与哲学家3的他们左右相邻的哲学家也是不相同的实际情况。</p>
+
+<p>每个哲学家执行的算法的基本步骤为：</p>
+
+<ol>
+<li>从思考状态到饥饿状态（为了简化分析我们假定哲学家们总是会饿的）；</li>
+<li>饿了的时候，随机决定是拿起左叉还是右叉；</li>
+<li>在上一步决定要拿起的叉子到手前持续等待（其他哲学家放下叉子）；</li>
+<li>如果手中已有了一把叉子，另一把叉子又放在桌上的，就把它拿起来；否则，把手上拿的叉子放下（并回到步骤1继续饥饿状态）；</li>
+<li>（占有了两把叉子以后就）开吃；</li>
+<li>吃完以后，按任意顺序把两把叉子放下，并重新开始思考。</li>
+</ol>
+
+</div></body>
+
+</html>
