@@ -661,6 +661,7 @@ a.prism-cite { color:#006600; }
 </style>
 
 <style> @media print{ .hljs{overflow: visible; word-wrap: break-word !important;} }</style></head><body><div class="markdown-body">
+<a href="basics.html">如您还不了解PRISM基础语法请点击这里</a>
 <h1 id="toc_0">哲学家进餐问题</h1>
 
 <p>哲学家进餐问题是将一套资源分配给数个进程而产生的并发问题（concurrency problems）之一。Edsger Dijkstra是该问题的提出者，他在1971年做了一个关于五台电脑竞争五个共享的磁带驱动器的实验问题。这个计算机的问题由Tony Hoare转述而成了著名的哲学家进餐问题。</p>
@@ -759,6 +760,25 @@ a.prism-cite { color:#006600; }
 <li>（占有了两把叉子以后就）开吃；</li>
 <li>吃完以后，按任意顺序把两把叉子放下，并重新开始思考。</li>
 </ol>
+
+<p>关于如何用PRISM模拟请参考课件PRISM2。</p>
+
+<!--下载模型文件[lr3](http://www.prismmodelchecker.org/tutorial/examples/phil/lr3.nm)并将其载入到PRISM中，进行下面的试验：-->
+
+<h2 id="toc_2">分析Lehmann和Rabin的解决方案</h2>
+
+<pre class="prism-code"><span class="prismcomment">// 不存在死锁问题</span>
+<span class="prismkeyword">filter</span>(<span class="prismident">forall</span>, "<span class="prismident">hungry</span>" =&gt; <span class="prismkeyword">P</span>&gt;=<span class="prismnum">1</span> [ <span class="prismkeyword">F</span> "<span class="prismident">eat</span>"])
+
+<span class="prismcomment">// 不存在资源匮乏问题</span>
+<span class="prismkeyword">filter</span>(<span class="prismident">forall</span>, "<span class="prismident">hungry1</span>" =&gt; <span class="prismkeyword">P</span>&gt;=<span class="prismnum">1</span> [ <span class="prismkeyword">F</span> "<span class="prismident">eat1</span>"])
+<span class="prismkeyword">filter</span>(<span class="prismident">forall</span>, "<span class="prismident">hungry2</span>" =&gt; <span class="prismkeyword">P</span>&gt;=<span class="prismnum">1</span> [ <span class="prismkeyword">F</span> "<span class="prismident">eat2</span>"])
+<span class="prismkeyword">filter</span>(<span class="prismident">forall</span>, "<span class="prismident">hungry3</span>" =&gt; <span class="prismkeyword">P</span>&gt;=<span class="prismnum">1</span> [ <span class="prismkeyword">F</span> "<span class="prismident">eat3</span>"])
+</pre>
+
+<p>上面出现的这个filter是能用来检验模型性质的语句（如何用PRISM验证请参考课件PRISM2），属于PRISM的性质声明语言（property specifications）。以第一条语句为例，可以检验是否从任意的状态开始，一定会出现（概率为1）由“hungry”最终到“eat”情形的一个转变。第一条语句可以验证模型是否解决了死锁问题。由PRISM的校验可以得知，验证的结果为true，即说明该模型可以避免死锁问题。</p>
+
+<p>此处的后三条语句验证均为false。以第二条语句为例，检验的是模型是否最终一定会由&quot;hungry1&quot;转变到&quot;eat1&quot;的情形（即哲学家1是否一定能从饥饿态到进食态）。后三条语句均为false说明该模型并不能避免“资源匮乏问题（resource starvation）”（这即是说，哲学家们并不一定能够吃上饭，可能会有哲学家一直没饭吃——一直没两把叉子用的情况）。</p>
 
 </div></body>
 
