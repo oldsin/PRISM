@@ -695,7 +695,7 @@ a.prism-cite { color:#006600; }
 <span class="prismcomment">// 公式 </span>
 <span class="prismcomment">// 左叉可用 （左边坐着哲学家2）</span>
 <span class="prismkeyword">formula</span> <span class="prismident">lfree</span> = (<span class="prismident">p2</span>&gt;=<span class="prismnum">0</span> &amp; <span class="prismident">p2</span>&lt;=<span class="prismnum">4</span>) | <span class="prismident">p2</span>=<span class="prismnum">6</span> | <span class="prismident">p2</span>=<span class="prismnum">10</span>;
-<span class="prismcomment">// 右叉可用 （左边坐着哲学家3）</span>
+<span class="prismcomment">// 右叉可用 （右边坐着哲学家3）</span>
 <span class="prismkeyword">formula</span> <span class="prismident">rfree</span> = (<span class="prismident">p3</span>&gt;=<span class="prismnum">0</span> &amp; <span class="prismident">p3</span>&lt;=<span class="prismnum">3</span>) | <span class="prismident">p3</span>=<span class="prismnum">5</span> | <span class="prismident">p3</span>=<span class="prismnum">7</span> | <span class="prismident">p3</span>=<span class="prismnum">11</span>;
 
 <span class="prismkeyword">module</span> <span class="prismident">phil1</span>
@@ -726,9 +726,9 @@ a.prism-cite { color:#006600; }
 
 <span class="prismcomment">// 标签</span>
 
-<span class="prismcomment">// 这位哲学家饿了</span>
-<span class="prismkeyword">label</span> "<span class="prismident">hungry</span>" = ((<span class="prismident">p1</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p1</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p2</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p2</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p3</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p3</span>&lt;<span class="prismnum">8</span>)); 
-<span class="prismcomment">// 这位哲学家在次饭</span>
+<span class="prismcomment">// 有哲学家饿了</span>
+<span class="prismkeyword">label</span> "<span class="prismident">hungry</span>" = ((<span class="prismident">p1</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p1</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p2</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p2</span>&lt;<span class="prismnum">8</span>))|((<span class="prismident">p3</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p3</span>&lt;<span class="prismnum">8</span>));
+<span class="prismcomment">// 有哲学家在次饭</span>
 <span class="prismkeyword">label</span> "<span class="prismident">eat</span>" = ((<span class="prismident">p1</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p1</span>&lt;=<span class="prismnum">9</span>))|((<span class="prismident">p2</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p2</span>&lt;=<span class="prismnum">9</span>))|((<span class="prismident">p3</span>&gt;=<span class="prismnum">8</span>)&amp;(<span class="prismident">p3</span>&lt;=<span class="prismnum">9</span>));
 <span class="prismcomment">// 哲学家1饿了</span>
 <span class="prismkeyword">label</span> "<span class="prismident">hungry1</span>" = (<span class="prismident">p1</span>&gt;<span class="prismnum">0</span>)&amp;(<span class="prismident">p1</span>&lt;<span class="prismnum">8</span>);
